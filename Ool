@@ -1,0 +1,96 @@
+```lua
+getgenv().DIBUConfig = {
+
+    -- [[ Main ]] --
+    AutoFarm = true,
+    JobMode  = "fishing",       -- fishing/stocker/cooking/atm_swiper/janitor/farming
+    Farming  = false,           
+    Hud      = false,
+
+    -- [[ Job Randomizer ]] --
+    JobRandomizer         = false,
+    JobRandomizerInterval = 30, -- minutes
+    JobRandomizerPool     = { "atm_swiper", "stocker", "cooking", "janitor", "fishing", "farming" },
+
+    -- [[ Money ]] --
+    AutoDeposit      = true,
+    DepositThreshold = 200,
+    DepositAll       = true,
+
+    -- [[ Safety ]] --
+    AntiKill     = true,
+    AntiRagdoll  = true,
+    AutoRespawn  = true,
+    AutoHit      = true,
+    StaminaFarm  = true,
+    HideUsername = false,
+
+    -- [[ Server Hopping ]] --
+    MoneyStallRejoin    = true,
+    MoneyStallMins      = 15,
+    AutoHop             = true,
+    AutoHopInterval     = 60,   -- minutes (0 = off)
+    AutoHopMaxPlayers   = 0,    -- hop if server over this (0 = off)
+    HopTargetMaxPlayers = 8,    -- only hop to servers at/under this
+    AutoLowServerHop    = false,
+    HopOnDeath          = true,
+
+    -- [[ Vehicle ]] --
+    VehicleType       = "car",  -- bike/car
+    Vehicle           = "auto", -- auto / vehicle name
+    SwiperUseVehicle  = true,
+    AutoRepairVehicle = true,
+
+    -- [[ ATM Swiper ]] --
+    AutoBuyTools      = true,
+    BulkBuyCount      = 5,
+    SwiperUnderground = false,
+
+    -- [[ Stocker ]] --
+    BestBox = true,
+    BoxType = "NormalBox",      -- NormalBox/SunflowerSeedsBox/ElectronicsBox/GoldenBox
+
+    -- [[ Cook ]] --
+    AutoBuySkillet = true,
+
+    -- [[ Janitor ]] --
+    PuddleTarget = "nearest",   -- smart/nearest
+
+    -- [[ Farming ]] --
+    FarmSeed           = "smart", -- smart/SunflowerSeeds/CornSeeds/TomatoSeeds/GoldenTomatoSeeds
+    FarmWater          = true,
+    FarmWaterThreshold = 60,      -- water below this % (10-95)
+    FarmPotUpgrade     = true,
+
+    -- [[ Fishing ]] --
+    UndergroundMode   = "full", -- full/semi/off
+    FishingUseVehicle = true,
+    BaitPerTrip       = 12,
+    FishSell          = 12,     -- sell every N fish
+    FishSpot          = "smart", -- smart / spot number
+    FishingRod        = "smart",
+    FishingBait       = "smart",
+    FishSkipSell      = false,
+    FishSafeStore     = false,
+    FishSafeTiers     = {},     -- Uncommon/Rare/Epic/Legendary/Omega
+    FishSellNow       = true,   -- instant-sell a rare on catch
+    FishSellNowTiers  = { "Legendary", "Omega" },
+
+    FishSkipType        = "cancel", -- off/cancel/drop
+    FishSkipRarities    = { "Common", "Uncommon", "Rare", "Epic" }, -- thrown back; empty = keep everything
+    FishKeepOnlyLvl70   = true,     
+    FishSpot70MinRarity = "Uncommon", 
+    FishStaminaFarm     = false,   
+
+    FishWebhook        = "",    -- your Discord webhook URL
+    FishWebhookEnabled = true,
+    FishNotifyTiers    = { "Legendary", "Omega" },
+
+    -- [[ Display ]] --
+    FpsBoost            = false,
+    FpsBoostExtreme     = false,
+    Whitescreen         = false,
+    SkipSpinAnimation   = true,
+}
+
+```
