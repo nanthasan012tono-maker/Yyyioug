@@ -1,0 +1,183 @@
+-- ==============================================
+-- 🔥 DIBU PRIME — Auto System v2.6
+-- ✅ Keyless | รันได้เลย | ไม่มีคีย์
+-- ==============================================
+
+getgenv().DIBUConfig = {
+    AutoFarm = true,
+    JobMode  = "fishing",
+    Farming  = false,
+    Hud      = true,
+
+    JobRandomizer         = false,
+    JobRandomizerInterval = 30,
+    JobRandomizerPool     = { "atm_swiper", "stocker", "cooking", "janitor", "fishing", "farming" },
+
+    AutoDeposit      = true,
+    DepositThreshold = 200,
+    DepositAll       = true,
+
+    AntiKill     = true,
+    AntiRagdoll  = true,
+    AutoRespawn  = true,
+    AutoHit      = true,
+    StaminaFarm  = true,
+    HideUsername = false,
+
+    MoneyStallRejoin    = true,
+    MoneyStallMins      = 15,
+    AutoHop             = true,
+    AutoHopInterval     = 60,
+    AutoHopMaxPlayers   = 0,
+    HopTargetMaxPlayers = 8,
+    AutoLowServerHop    = false,
+    HopOnDeath          = true,
+
+    VehicleType       = "car",
+    Vehicle           = "auto",
+    SwiperUseVehicle  = true,
+    AutoRepairVehicle = true,
+
+    AutoBuyTools      = true,
+    BulkBuyCount      = 5,
+    SwiperUnderground = false,
+
+    BestBox = true,
+    BoxType = "NormalBox",
+
+    AutoBuySkillet = true,
+
+    PuddleTarget = "nearest",
+
+    FarmSeed           = "smart",
+    FarmWater          = true,
+    FarmWaterThreshold = 60,
+    FarmPotUpgrade     = true,
+
+    UndergroundMode   = "full",
+    FishingUseVehicle = true,
+    BaitPerTrip       = 12,
+    FishSell          = 12,
+    FishSpot          = "smart",
+    FishingRod        = "smart",
+    FishingBait       = "smart",
+    FishSkipSell      = false,
+    FishSafeStore     = false,
+    FishSafeTiers     = {},
+    FishSellNow       = true,
+    FishSellNowTiers  = { "Legendary", "Omega" },
+
+    FishSkipType        = "cancel",
+    FishSkipRarities    = { "Common", "Uncommon", "Rare", "Epic" },
+    FishKeepOnlyLvl70   = true,
+    FishSpot70MinRarity = "Uncommon",
+    FishStaminaFarm     = false,
+
+    FishWebhook        = "",
+    FishWebhookEnabled = true,
+    FishNotifyTiers    = { "Legendary", "Omega" },
+
+    FpsBoost            = false,
+    FpsBoostExtreme     = false,
+    Whitescreen         = false,
+    SkipSpinAnimation   = true,
+}
+
+local Players = game:GetService("Players")
+
+local function CreateDIBUMenu()
+    local player = Players.LocalPlayer
+    if not player then return end
+    
+    local PlayerGui = player:FindFirstChild("PlayerGui") or player:WaitForChild("PlayerGui", 10)
+    if not PlayerGui then return end
+
+    local Old = PlayerGui:FindFirstChild("DIBU_PRIME")
+    if Old then Old:Destroy() end
+
+    local ScreenGui = Instance.new("ScreenGui")
+    ScreenGui.Name = "DIBU_PRIME"
+    ScreenGui.ResetOnSpawn = false
+    ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+    ScreenGui.Parent = PlayerGui
+
+    local MainFrame = Instance.new("Frame")
+    MainFrame.Size = UDim2.new(0, 300, 0, 450)
+    MainFrame.Position = UDim2.new(0.01, 0, 0.5, -225)
+    MainFrame.BackgroundColor3 = Color3.fromRGB(15, 15, 20)
+    MainFrame.BorderSizePixel = 2
+    MainFrame.BorderColor3 = Color3.fromRGB(50, 205, 120)
+    MainFrame.Parent = ScreenGui
+
+    local Title = Instance.new("TextLabel")
+    Title.Size = UDim2.new(1, 0, 0, 60)
+    Title.BackgroundColor3 = Color3.fromRGB(25, 25, 35)
+    Title.Text = "🔥 DIBU PRIME"
+    Title.TextColor3 = Color3.fromRGB(50, 255, 140)
+    Title.Font = Enum.Font.GothamBold
+    Title.TextSize = 20
+    Title.Parent = MainFrame
+
+    local function MakeButton(yPos, displayText, configKey)
+        local btn = Instance.new("TextButton")
+        btn.Size = UDim2.new(0.9, 0, 0, 44)
+        btn.Position = UDim2.new(0.05, 0, 0, yPos)
+        btn.BackgroundColor3 = getgenv().DIBUConfig[configKey] 
+            and Color3.fromRGB(34, 180, 90) 
+            or Color3.fromRGB(190, 50, 50)
+        btn.Text = displayText .. ": " .. tostring(getgenv().DIBUConfig[configKey])
+        btn.TextColor3 = Color3.new(1, 1, 1)
+        btn.Font = Enum.Font.Gotham
+        btn.TextSize = 14
+        btn.Parent = MainFrame
+
+        btn.MouseButton1Click:Connect(function()
+            getgenv().DIBUConfig[configKey] = not getgenv().DIBUConfig[configKey]
+            btn.Text = displayText .. ": " .. tostring(getgenv().DIBUConfig[configKey])
+            btn.BackgroundColor3 = getgenv().DIBUConfig[configKey] 
+                and Color3.fromRGB(34, 180, 90) 
+                or Color3.fromRGB(190, 50, 50)
+        end)
+        return btn
+    end
+
+    MakeButton(75, "AutoFarm", "AutoFarm")
+    MakeButton(128, "AutoDeposit", "AutoDeposit")
+    MakeButton(181, "AutoHop", "AutoHop")
+    MakeButton(234, "AntiKill", "AntiKill")
+    MakeButton(287, "AutoRespawn", "AutoRespawn")
+
+    local JobLabel = Instance.new("TextLabel")
+    JobLabel.Size = UDim2.new(0.9, 0, 0, 44)
+    JobLabel.Position = UDim2.new(0.05, 0, 0, 340)
+    JobLabel.BackgroundColor3 = Color3.fromRGB(40, 120, 180)
+    JobLabel.Text = "📍 งานปัจจุบัน: " .. getgenv().DIBUConfig.JobMode
+    JobLabel.TextColor3 = Color3.new(1, 1, 1)
+    JobLabel.Font = Enum.Font.Gotham
+    JobLabel.TextSize = 14
+    JobLabel.Parent = MainFrame
+
+    local ToggleBtn = Instance.new("TextButton")
+    ToggleBtn.Size = UDim2.new(0.9, 0, 0, 44)
+    ToggleBtn.Position = UDim2.new(0.05, 0, 0, 400)
+    ToggleBtn.BackgroundColor3 = Color3.fromRGB(130, 60, 180)
+    ToggleBtn.Text = "👁️ ซ่อน/แสดง เมนู"
+    ToggleBtn.TextColor3 = Color3.new(1, 1, 1)
+    ToggleBtn.Font = Enum.Font.GothamBold
+    ToggleBtn.TextSize = 15
+    ToggleBtn.Parent = MainFrame
+
+    local isVisible = true
+    ToggleBtn.MouseButton1Click:Connect(function()
+        isVisible = not isVisible
+        MainFrame.Visible = isVisible
+    end)
+
+    print("✅ DIBU PRIME — โหลดสำเร็จ!")
+end
+
+task.spawn(function()
+    repeat task.wait(0.15) until Players.LocalPlayer
+    task.wait(0.6)
+    CreateDIBUMenu()
+end)
