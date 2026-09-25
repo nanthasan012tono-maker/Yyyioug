@@ -1,0 +1,200 @@
+-- ==============================================
+-- DIBU Auto — รันตรงไม่ผ่านลิงก์
+-- ==============================================
+
+-- ตั้งค่า
+getgenv().DIBUConfig = {
+    AutoFarm = true,
+    JobMode  = "fishing",
+    Farming  = false,
+    Hud      = true,
+
+    JobRandomizer         = false,
+    JobRandomizerInterval = 30,
+    JobRandomizerPool     = { "atm_swiper", "stocker", "cooking", "janitor", "fishing", "farming" },
+
+    AutoDeposit      = true,
+    DepositThreshold = 200,
+    DepositAll       = true,
+
+    AntiKill     = true,
+    AntiRagdoll  = true,
+    AutoRespawn  = true,
+    AutoHit      = true,
+    StaminaFarm  = true,
+    HideUsername = false,
+
+    MoneyStallRejoin    = true,
+    MoneyStallMins      = 15,
+    AutoHop             = true,
+    AutoHopInterval     = 60,
+    AutoHopMaxPlayers   = 0,
+    HopTargetMaxPlayers = 8,
+    AutoLowServerHop    = false,
+    HopOnDeath          = true,
+
+    VehicleType       = "car",
+    Vehicle           = "auto",
+    SwiperUseVehicle  = true,
+    AutoRepairVehicle = true,
+
+    AutoBuyTools      = true,
+    BulkBuyCount      = 5,
+    SwiperUnderground = false,
+
+    BestBox = true,
+    BoxType = "NormalBox",
+
+    AutoBuySkillet = true,
+
+    PuddleTarget = "nearest",
+
+    FarmSeed           = "smart",
+    FarmWater          = true,
+    FarmWaterThreshold = 60,
+    FarmPotUpgrade     = true,
+
+    UndergroundMode   = "full",
+    FishingUseVehicle = true,
+    BaitPerTrip       = 12,
+    FishSell          = 12,
+    FishSpot          = "smart",
+    FishingRod        = "smart",
+    FishingBait       = "smart",
+    FishSkipSell      = false,
+    FishSafeStore     = false,
+    FishSafeTiers     = {},
+    FishSellNow       = true,
+    FishSellNowTiers  = { "Legendary", "Omega" },
+
+    FishSkipType        = "cancel",
+    FishSkipRarities    = { "Common", "Uncommon", "Rare", "Epic" },
+    FishKeepOnlyLvl70   = true,
+    FishSpot70MinRarity = "Uncommon",
+    FishStaminaFarm     = false,
+
+    FishWebhook        = "",
+    FishWebhookEnabled = true,
+    FishNotifyTiers    = { "Legendary", "Omega" },
+
+    FpsBoost            = false,
+    FpsBoostExtreme     = false,
+    Whitescreen         = false,
+    SkipSpinAnimation   = true,
+}
+
+-- ==============================================
+-- สร้างเมนูแบบรอจนกว่าจะพร้อม
+-- ==============================================
+local Players = game:GetService("Players")
+
+local function MakeMenu()
+    local player = Players.LocalPlayer
+    if not player then return end
+    
+    local PlayerGui = player:FindFirstChild("PlayerGui")
+    if not PlayerGui then return end
+
+    -- ลบเมนูเก่า
+    local Old = PlayerGui:FindFirstChild("DIBU_Menu")
+    if Old then Old:Destroy() end
+
+    -- สร้างใหม่
+    local ScreenGui = Instance.new("ScreenGui")
+    ScreenGui.Name = "DIBU_Menu"
+    ScreenGui.ResetOnSpawn = false
+    ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+    ScreenGui.Parent = PlayerGui
+
+    local MainFrame = Instance.new("Frame")
+    MainFrame.Size = UDim2.new(0, 280, 0, 420)
+    MainFrame.Position = UDim2.new(0.02, 0, 0.5, -210)
+    MainFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 30)
+    MainFrame.BorderSizePixel = 2
+    MainFrame.BorderColor3 = Color3.fromRGB(80, 80, 100)
+    MainFrame.Parent = ScreenGui
+
+    local Title = Instance.new("TextLabel")
+    Title.Size = UDim2.new(1, 0, 0, 50)
+    Title.BackgroundColor3 = Color3.fromRGB(40, 40, 60)
+    Title.Text = "✅ DIBU Auto — ทำงานแล้ว"
+    Title.TextColor3 = Color3.fromRGB(100, 255, 150)
+    Title.Font = Enum.Font.GothamBold
+    Title.TextSize = 16
+    Title.Parent = MainFrame
+
+    local AutoFarmBtn = Instance.new("TextButton")
+    AutoFarmBtn.Size = UDim2.new(0.9, 0, 0, 45)
+    AutoFarmBtn.Position = UDim2.new(0.05, 0, 0, 65)
+    AutoFarmBtn.BackgroundColor3 = getgenv().DIBUConfig.AutoFarm 
+        and Color3.fromRGB(46, 204, 113) 
+        or Color3.fromRGB(231, 76, 60)
+    AutoFarmBtn.Text = "AutoFarm: "..tostring(getgenv().DIBUConfig.AutoFarm)
+    AutoFarmBtn.TextColor3 = Color3.new(1, 1, 1)
+    AutoFarmBtn.Font = Enum.Font.Gotham
+    AutoFarmBtn.TextSize = 14
+    AutoFarmBtn.Parent = MainFrame
+
+    AutoFarmBtn.MouseButton1Click:Connect(function()
+        getgenv().DIBUConfig.AutoFarm = not getgenv().DIBUConfig.AutoFarm
+        AutoFarmBtn.Text = "AutoFarm: "..tostring(getgenv().DIBUConfig.AutoFarm)
+        AutoFarmBtn.BackgroundColor3 = getgenv().DIBUConfig.AutoFarm 
+            and Color3.fromRGB(46, 204, 113) 
+            or Color3.fromRGB(231, 76, 60)
+    end)
+
+    local AutoHopBtn = Instance.new("TextButton")
+    AutoHopBtn.Size = UDim2.new(0.9, 0, 0, 45)
+    AutoHopBtn.Position = UDim2.new(0.05, 0, 0, 125)
+    AutoHopBtn.BackgroundColor3 = getgenv().DIBUConfig.AutoHop 
+        and Color3.fromRGB(46, 204, 113) 
+        or Color3.fromRGB(231, 76, 60)
+    AutoHopBtn.Text = "AutoHop: "..tostring(getgenv().DIBUConfig.AutoHop)
+    AutoHopBtn.TextColor3 = Color3.new(1, 1, 1)
+    AutoHopBtn.Font = Enum.Font.Gotham
+    AutoHopBtn.TextSize = 14
+    AutoHopBtn.Parent = MainFrame
+
+    AutoHopBtn.MouseButton1Click:Connect(function()
+        getgenv().DIBUConfig.AutoHop = not getgenv().DIBUConfig.AutoHop
+        AutoHopBtn.Text = "AutoHop: "..tostring(getgenv().DIBUConfig.AutoHop)
+        AutoHopBtn.BackgroundColor3 = getgenv().DIBUConfig.AutoHop 
+            and Color3.fromRGB(46, 204, 113) 
+            or Color3.fromRGB(231, 76, 60)
+    end)
+
+    local JobLabel = Instance.new("TextLabel")
+    JobLabel.Size = UDim2.new(0.9, 0, 0, 45)
+    JobLabel.Position = UDim2.new(0.05, 0, 0, 185)
+    JobLabel.BackgroundColor3 = Color3.fromRGB(52, 152, 219)
+    JobLabel.Text = "งานปัจจุบัน: "..getgenv().DIBUConfig.JobMode
+    JobLabel.TextColor3 = Color3.new(1, 1, 1)
+    JobLabel.Font = Enum.Font.Gotham
+    JobLabel.TextSize = 13
+    JobLabel.Parent = MainFrame
+
+    local ToggleBtn = Instance.new("TextButton")
+    ToggleBtn.Size = UDim2.new(0.9, 0, 0, 45)
+    ToggleBtn.Position = UDim2.new(0.05, 0, 0, 350)
+    ToggleBtn.BackgroundColor3 = Color3.fromRGB(155, 89, 182)
+    ToggleBtn.Text = "ซ่อน/แสดง เมนู"
+    ToggleBtn.TextColor3 = Color3.new(1, 1, 1)
+    ToggleBtn.Font = Enum.Font.GothamBold
+    ToggleBtn.TextSize = 14
+    ToggleBtn.Parent = MainFrame
+
+    local isVisible = true
+    ToggleBtn.MouseButton1Click:Connect(function()
+        isVisible = not isVisible
+        MainFrame.Visible = isVisible
+    end)
+
+    print("✅ DIBU Menu — แสดงผลแล้ว!")
+end
+
+-- รอจนกว่าจะพร้อม
+task.spawn(function()
+    repeat task.wait(0.2) until Players.LocalPlayer
+    task.wait(0.5)
+    MakeMenu()
+end)
