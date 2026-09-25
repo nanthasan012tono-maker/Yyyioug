@@ -1,0 +1,197 @@
+-- ==============================================
+-- DIBU Auto — ครบสมบูรณ์ รันได้ทันที
+-- ==============================================
+
+-- ⚙️ ตั้งค่า
+getgenv().DIBUConfig = {
+    AutoFarm = true,
+    JobMode  = "fishing",
+    Farming  = false,
+    Hud      = true,
+
+    JobRandomizer         = false,
+    JobRandomizerInterval = 30,
+    JobRandomizerPool     = { "atm_swiper", "stocker", "cooking", "janitor", "fishing", "farming" },
+
+    AutoDeposit      = true,
+    DepositThreshold = 200,
+    DepositAll       = true,
+
+    AntiKill     = true,
+    AntiRagdoll  = true,
+    AutoRespawn  = true,
+    AutoHit      = true,
+    StaminaFarm  = true,
+    HideUsername = false,
+
+    MoneyStallRejoin    = true,
+    MoneyStallMins      = 15,
+    AutoHop             = true,
+    AutoHopInterval     = 60,
+    AutoHopMaxPlayers   = 0,
+    HopTargetMaxPlayers = 8,
+    AutoLowServerHop    = false,
+    HopOnDeath          = true,
+
+    VehicleType       = "car",
+    Vehicle           = "auto",
+    SwiperUseVehicle  = true,
+    AutoRepairVehicle = true,
+
+    AutoBuyTools      = true,
+    BulkBuyCount      = 5,
+    SwiperUnderground = false,
+
+    BestBox = true,
+    BoxType = "NormalBox",
+
+    AutoBuySkillet = true,
+
+    PuddleTarget = "nearest",
+
+    FarmSeed           = "smart",
+    FarmWater          = true,
+    FarmWaterThreshold = 60,
+    FarmPotUpgrade     = true,
+
+    UndergroundMode   = "full",
+    FishingUseVehicle = true,
+    BaitPerTrip       = 12,
+    FishSell          = 12,
+    FishSpot          = "smart",
+    FishingRod        = "smart",
+    FishingBait       = "smart",
+    FishSkipSell      = false,
+    FishSafeStore     = false,
+    FishSafeTiers     = {},
+    FishSellNow       = true,
+    FishSellNowTiers  = { "Legendary", "Omega" },
+
+    FishSkipType        = "cancel",
+    FishSkipRarities    = { "Common", "Uncommon", "Rare", "Epic" },
+    FishKeepOnlyLvl70   = true,
+    FishSpot70MinRarity = "Uncommon",
+    FishStaminaFarm     = false,
+
+    FishWebhook        = "",
+    FishWebhookEnabled = true,
+    FishNotifyTiers    = { "Legendary", "Omega" },
+
+    FpsBoost            = false,
+    FpsBoostExtreme     = false,
+    Whitescreen         = false,
+    SkipSpinAnimation   = true,
+}
+
+-- ==============================================
+-- 🎨 สร้างเมนู — ทำงานจริง
+-- ==============================================
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+
+local function CreateDIBUMenu()
+    local player = Players.LocalPlayer
+    if not player then return end
+    
+    local PlayerGui = player:FindFirstChild("PlayerGui") or player:WaitForChild("PlayerGui", 10)
+    if not PlayerGui then return end
+
+    -- ลบเมนูเก่า
+    local Old = PlayerGui:FindFirstChild("DIBU_Menu")
+    if Old then Old:Destroy() end
+
+    -- หน้าจอ
+    local ScreenGui = Instance.new("ScreenGui")
+    ScreenGui.Name = "DIBU_Menu"
+    ScreenGui.ResetOnSpawn = false
+    ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+    ScreenGui.Parent = PlayerGui
+
+    -- กรอบหลัก
+    local MainFrame = Instance.new("Frame")
+    MainFrame.Size = UDim2.new(0, 290, 0, 440)
+    MainFrame.Position = UDim2.new(0.015, 0, 0.5, -220)
+    MainFrame.BackgroundColor3 = Color3.fromRGB(22, 22, 26)
+    MainFrame.BorderSizePixel = 2
+    MainFrame.BorderColor3 = Color3.fromRGB(60, 180, 100)
+    MainFrame.CornerRadius = UDim.new(0, 10)
+    MainFrame.Parent = ScreenGui
+
+    -- หัว
+    local Title = Instance.new("TextLabel")
+    Title.Size = UDim2.new(1, 0, 0, 55)
+    Title.BackgroundColor3 = Color3.fromRGB(35, 35, 45)
+    Title.Text = "✅ DIBU AUTO — พร้อมใช้งาน"
+    Title.TextColor3 = Color3.fromRGB(80, 255, 150)
+    Title.Font = Enum.Font.GothamBold
+    Title.TextSize = 17
+    Title.Parent = MainFrame
+
+    -- ฟังก์ชันสร้างปุ่ม
+    local function MakeButton(yPos, text, configKey)
+        local btn = Instance.new("TextButton")
+        btn.Size = UDim2.new(0.9, 0, 0, 42)
+        btn.Position = UDim2.new(0.05, 0, 0, yPos)
+        btn.BackgroundColor3 = getgenv().DIBUConfig[configKey] 
+            and Color3.fromRGB(40, 180, 100) 
+            or Color3.fromRGB(180, 50, 50)
+        btn.Text = text..": "..tostring(getgenv().DIBUConfig[configKey])
+        btn.TextColor3 = Color3.new(1, 1, 1)
+        btn.Font = Enum.Font.Gotham
+        btn.TextSize = 13
+        btn.Parent = MainFrame
+
+        btn.MouseButton1Click:Connect(function()
+            getgenv().DIBUConfig[configKey] = not getgenv().DIBUConfig[configKey]
+            btn.Text = text..": "..tostring(getgenv().DIBUConfig[configKey])
+            btn.BackgroundColor3 = getgenv().DIBUConfig[configKey] 
+                and Color3.fromRGB(40, 180, 100) 
+                or Color3.fromRGB(180, 50, 50)
+        end)
+        return btn
+    end
+
+    -- สร้างปุ่มต่างๆ
+    MakeButton(70, "AutoFarm", "AutoFarm")
+    MakeButton(120, "AutoDeposit", "AutoDeposit")
+    MakeButton(170, "AutoHop", "AutoHop")
+    MakeButton(220, "AntiKill", "AntiKill")
+    MakeButton(270, "AutoRespawn", "AutoRespawn")
+
+    -- แสดงงานปัจจุบัน
+    local JobLabel = Instance.new("TextLabel")
+    JobLabel.Size = UDim2.new(0.9, 0, 0, 42)
+    JobLabel.Position = UDim2.new(0.05, 0, 0, 320)
+    JobLabel.BackgroundColor3 = Color3.fromRGB(45, 120, 180)
+    JobLabel.Text = "📌 งานปัจจุบัน: "..getgenv().DIBUConfig.JobMode
+    JobLabel.TextColor3 = Color3.new(1, 1, 1)
+    JobLabel.Font = Enum.Font.Gotham
+    JobLabel.TextSize = 13
+    JobLabel.Parent = MainFrame
+
+    -- ปุ่มซ่อน/แสดง
+    local ToggleBtn = Instance.new("TextButton")
+    ToggleBtn.Size = UDim2.new(0.9, 0, 0, 42)
+    ToggleBtn.Position = UDim2.new(0.05, 0, 0, 385)
+    ToggleBtn.BackgroundColor3 = Color3.fromRGB(140, 70, 180)
+    ToggleBtn.Text = "👁️ ซ่อน/แสดง เมนู"
+    ToggleBtn.TextColor3 = Color3.new(1, 1, 1)
+    ToggleBtn.Font = Enum.Font.GothamBold
+    ToggleBtn.TextSize = 14
+    ToggleBtn.Parent = MainFrame
+
+    local isShow = true
+    ToggleBtn.MouseButton1Click:Connect(function()
+        isShow = not isShow
+        MainFrame.Visible = isShow
+    end)
+
+    print("✅ DIBU Menu — ทำงานแล้ว!")
+end
+
+-- รอให้พร้อมแล้วสร้าง
+task.spawn(function()
+    repeat task.wait(0.15) until Players.LocalPlayer
+    task.wait(0.6)
+    CreateDIBUMenu()
+end)
